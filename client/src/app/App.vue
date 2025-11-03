@@ -1,10 +1,13 @@
 <template>
   <div>
-    Hello world
+    <router-view></router-view>
   </div>
 </template>
 
-<script>
+<script setup>
+defineOptions({
+  name: 'App'
+})
 </script>
 
 <style>
