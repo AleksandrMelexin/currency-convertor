@@ -3,3 +3,8 @@ export interface IRequestParams {
     to?: string;
     amount?: string;
 }
+
+export interface ICurrency {
+    ISO: string;
+    name: string;
+}

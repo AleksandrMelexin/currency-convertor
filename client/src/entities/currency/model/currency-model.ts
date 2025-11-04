@@ -1,5 +1,4 @@
 export interface ICurrency {
-    id: string;
+    ISO: string;
     name: string;
-    reate: number;
 }

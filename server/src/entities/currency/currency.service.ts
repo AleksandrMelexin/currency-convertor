@@ -1,3 +1,5 @@
+import { ICurrency } from "./currency.model";
+
 export class CurrencyService {
 
     private _currencyList: any;
@@ -13,6 +15,17 @@ export class CurrencyService {
 
     getCurrencyRates() {
         return this._currencyList;
+    }
+
+    getCurrencyArray(): Array<ICurrency> {
+        return Object.entries(this._currencyList).map(([code, name]) => ({
+            ISO: code,
+            name: name as string
+        }));
+    }
+
+    checkCurrencyInList(currency: string) {
+        return this._currencyList[currency];
     }
 
     convertCurrency(from: string, to: string, amount: number) {

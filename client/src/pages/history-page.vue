@@ -1,5 +1,5 @@
 <template>
-main-page
+history-page
 </template>
 
 <script setup lang="ts">
