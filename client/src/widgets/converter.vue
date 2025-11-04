@@ -14,7 +14,7 @@
               item-title="displayName"
               item-value="code"
               label="Из валюты"
-              :loading="currencyStore.isLoading"
+              :loading="isConverting"
               clearable
               required
             ></v-autocomplete>
@@ -27,7 +27,7 @@
               item-title="displayName"
               item-value="code"
               label="В валюту"
-              :loading="currencyStore.isLoading"
+              :loading="isConverting"
               clearable
               required
             ></v-autocomplete>
@@ -152,8 +152,6 @@ const performConversion = async () => {
       amount: conversion.value.amount.toString(),
       result: result.toString()
     })
-
-    console.log(historyStore.history)
 
   } catch (error) {
     convertError.value = error instanceof Error ? error.message : 'Неизвестная ошибка'
