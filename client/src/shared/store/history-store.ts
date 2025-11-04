@@ -11,4 +11,8 @@ export const useHistoryStore = defineStore("history", {
             this.history = [item, ...this.history];
         },
     },
+
+    getters: {
+        getHistory: (state) => state.history
+    }
 });

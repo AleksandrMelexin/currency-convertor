@@ -1,6 +1,8 @@
+import type { ICurrency } from "@/entities/currency/model/currency-model";
+
 export interface IHistoryItem {
-    from: string;
-    to: string;
+    from: ICurrency;
+    to: ICurrency;
     amount: string;
     result: string;
 }

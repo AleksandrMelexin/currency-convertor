@@ -11,10 +11,6 @@ import CurrencyList from '@/entities/currency/ui/currency-list.vue'
 </script>
 
 <style scoped>
-.min-height-100 {
-  min-height: 100vh;
-}
-
 .v-container {
   display: flex;
   justify-content: center;

@@ -57,13 +57,13 @@
       </v-form>
 
       <v-alert
-        v-if="conversionResult"
+        v-if="lastConversionResult"
         type="success"
         class="mt-4 text-center"
       >
         <div class="text-h6">
-          {{ conversion.amount }} {{ conversion.from }} = 
-          {{ conversionResult }} {{ conversion.to }}
+          {{ lastConversionResult.amount }} {{ lastConversionResult.from }} = 
+          {{ lastConversionResult.result }} {{ lastConversionResult.to }}
         </div>
       </v-alert>
 
@@ -81,9 +81,11 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useCurrencyStore } from '@/shared/store/currency-store'
+import { useHistoryStore } from '@/shared/store/history-store'
 import { convertCurrency } from '@/entities/currency/api/currency-api'
 
 const currencyStore = useCurrencyStore()
+const historyStore = useHistoryStore()
 
 const conversion = ref({
   from: '',
@@ -91,7 +93,13 @@ const conversion = ref({
   amount: 1
 })
 
-const conversionResult = ref<number | null>(null)
+const lastConversionResult = ref<{
+  from: string;
+  to: string;
+  amount: number;
+  result: number;
+} | null>(null)
+
 const isConverting = ref(false)
 const convertError = ref<string | null>(null)
 
@@ -101,6 +109,11 @@ const currencyOptions = computed(() => {
     displayName: `${currency.name} (${currency.ISO})`
   }))
 })
+
+const getCurrencyByCode = (isoCode: string) => {
+  const currency = currencyStore.currencies.find(c => c.ISO === isoCode)
+  return currency ? currency : { ISO: isoCode, name: isoCode }
+}
 
 const isFormValid = computed(() => {
   return conversion.value.from && 
@@ -114,7 +127,7 @@ const performConversion = async () => {
 
   isConverting.value = true
   convertError.value = null
-  conversionResult.value = null
+  lastConversionResult.value = null
 
   try {
     const result = await convertCurrency(
@@ -122,7 +135,26 @@ const performConversion = async () => {
       conversion.value.to,
       conversion.value.amount
     )
-    conversionResult.value = result
+
+    lastConversionResult.value = {
+      from: conversion.value.from,
+      to: conversion.value.to,
+      amount: conversion.value.amount,
+      result: result
+    }
+
+    const fromCurrency = getCurrencyByCode(conversion.value.from)
+    const toCurrency = getCurrencyByCode(conversion.value.to)
+
+    historyStore.addItem({
+      from: fromCurrency,
+      to: toCurrency,
+      amount: conversion.value.amount.toString(),
+      result: result.toString()
+    })
+
+    console.log(historyStore.history)
+
   } catch (error) {
     convertError.value = error instanceof Error ? error.message : 'Неизвестная ошибка'
     console.error('Ошибка конвертации:', error)

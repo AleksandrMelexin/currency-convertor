@@ -67,11 +67,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.mx-auto {
-  margin-left: auto;
-  margin-right: auto;
-}
-
 .currency-list {
   max-height: 400px;
   overflow-y: auto;
