@@ -1,13 +1,9 @@
 <template>
-  <div>
-    main-page
-  </div>
+main-page
 </template>
 
-<script setup>
-defineOptions({
-  name: 'main-page'
-})
+<script setup lang="ts">
+
 </script>
 
 <style>
