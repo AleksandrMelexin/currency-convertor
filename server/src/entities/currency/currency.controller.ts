@@ -13,7 +13,7 @@ export class CurrencyController {
     }
 
     bindRoutes() {
-        this._router.get('/list', this.getCurrencyList.bind(this));
+        this._router.get('/currencies', this.getCurrencyArray.bind(this));
         this._router.get('/convert', this.convertCurrency.bind(this)); // Добавляем новый маршрут
     }
 
@@ -21,9 +21,9 @@ export class CurrencyController {
         return this._router;
     }
 
-    async getCurrencyList(req: Request, res: Response) {
+    async getCurrencyArray(req: Request, res: Response) {
         try {
-            const currencies = this._CurrencyService.getCurrencyList();
+            const currencies = this._CurrencyService.getCurrencyArray();
             res.json(currencies);
         } catch (err: any) {
             console.log(err.message);
@@ -49,13 +49,12 @@ export class CurrencyController {
                 });
             }
     
-            const currencyList = this._CurrencyService.getCurrencyList();
-            if (!currencyList[from]) {
+            if (!this._CurrencyService.checkCurrencyInList(from)) {
                 return res.status(400).json({
                     error: `Валюта '${from}' не найдена`
                 });
             }
-            if (!currencyList[to]) {
+            if (!this._CurrencyService.checkCurrencyInList(to)) {
                 return res.status(400).json({
                     error: `Валюта '${to}' не найдена`
                 });
